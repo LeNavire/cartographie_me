@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galerie Cartographie_me</title>
+    <!-- Inclusion de Tailwind CSS pour le style -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Ajout d'une hauteur maximale pour éviter que les images très hautes ne dépassent trop de l'écran */
+        .image-container img {
+            max-height: 75vh;
+            object-fit: contain;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-100 flex flex-col min-h-screen">
+
+    <!-- En-tête avec le titre demandé -->
+    <header class="bg-gray-800 p-6 shadow-md">
+        <h1 class="text-2xl md:text-3xl font-bold text-center text-blue-400">
+           <span style="color: white;">Cartographie_me </span> : une application développée par un ingénieur pour répondre efficacement à vos besoins.
+        </h1>
+    </header>
+
+    <!-- Contenu principal : la visionneuse d'images -->
+    <main class="flex-grow flex flex-col items-center justify-center p-4">
+        
+        <div class="max-w-5xl w-full bg-gray-800 p-4 rounded-lg shadow-xl">
+            
+            <!-- Conteneur de l'image -->
+            <div class="image-container flex justify-center items-center bg-gray-950 rounded-lg overflow-hidden mb-6 border border-gray-700">
+                <!-- L'image sera chargée ici par le JavaScript -->
+                <img id="displayed-image" src="" alt="Plan ou Cartographie" class="w-auto h-auto transition-opacity duration-300 opacity-100">
+            </div>
+
+            <!-- Contrôles de navigation -->
+            <div class="flex flex-col md:flex-row items-center justify-between bg-gray-700 p-4 rounded-lg">
+                
+                <!-- Bouton Précédent -->
+                <button id="prev-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded focus:outline-none focus:shadow-outline transition duration-200 flex items-center mb-4 md:mb-0">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mr-2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+                    </svg>
+                    Précédent
+                </button>
+
+                <!-- Indicateur de position (ex: 1 / 7) -->
+                <span id="image-counter" class="text-lg font-semibold text-gray-300 mb-4 md:mb-0">
+                    Chargement...
+                </span>
+
+                <!-- Bouton Suivant -->
+                <button id="next-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded focus:outline-none focus:shadow-outline transition duration-200 flex items-center">
+                    Suivant
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 ml-2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+                    </svg>
+                </button>
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- Pied de page simple -->
+    <footer class="bg-gray-800 text-center p-4 text-gray-500 text-sm">
+        © 2026 Cartographie_me. Tous droits réservés.
+    </footer>
+
+    <script>
+        // Liste des noms de fichiers des images fournies
+        const imageFiles = [
+            "001.png",
+            "002.png",
+            "003.png",
+            "004.png",
+            "005.png",
+            "006.png",
+            "007.png",
+            "008.png",
+            "009.png",
+            "010.png",
+            "011.png",
+            "012.png",
+            "013.png",
+            "014.png",
+            "015.png",
+            "016.png",
+        ];
+
+        let currentIndex = 0;
+
+        // Récupération des éléments du DOM
+        const displayedImage = document.getElementById('displayed-image');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const imageCounter = document.getElementById('image-counter');
+
+        // Fonction pour afficher une image spécifique selon son index
+        function showImage(index) {
+            // Petit effet de transition
+            displayedImage.style.opacity = '0.5';
+            
+            setTimeout(() => {
+                displayedImage.src = imageFiles[index];
+                displayedImage.alt = "Affichage de " + imageFiles[index];
+                
+                // Mise à jour du compteur (Index + 1 car l'index commence à 0)
+                imageCounter.textContent = `${index + 1} / ${imageFiles.length}`;
+                displayedImage.style.opacity = '1';
+            }, 150); // Délai court pour la transition
+        }
+
+        // Fonction pour aller à l'image suivante
+        function nextImage() {
+            currentIndex = (currentIndex + 1) % imageFiles.length; // Boucle au début si on est à la fin
+            showImage(currentIndex);
+        }
+
+        // Fonction pour aller à l'image précédente
+        function prevImage() {
+            currentIndex = (currentIndex - 1 + imageFiles.length) % imageFiles.length; // Boucle à la fin si on est au début
+            showImage(currentIndex);
+        }
+
+        // Ajout des écouteurs d'événements sur les boutons
+        nextBtn.addEventListener('click', nextImage);
+        prevBtn.addEventListener('click', prevImage);
+
+        // Ajout de la navigation au clavier (flèches gauche/droite)
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') {
+                nextImage();
+            } else if (e.key === 'ArrowLeft') {
+                prevImage();
+            }
+        });
+
+        // Initialisation : Afficher la première image au chargement de la page
+        showImage(currentIndex);
+
+    </script>
+</body>
+</html>
